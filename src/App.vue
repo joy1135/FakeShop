@@ -58,12 +58,12 @@ a {
 }
 @media screen and (max-width: 576px) {
   .container {
-    max-width: 768px;
+    max-width: 576px;
   }
 }
 @media screen and (max-width: 320px) {
   .container {
-    max-width: 768px;
+    max-width: 320px;
   }
 }
 </style>

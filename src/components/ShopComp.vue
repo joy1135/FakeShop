@@ -1,46 +1,67 @@
 <template>
-<div class="shop">
+  <div class="shop">
     <div class="shop__container container">
-        <div class="shop__cards">
-            <ProductCard v-for="(value, key) in  currentPageProducts" :key="key"
-            :id="value.id" 
-            :urlImage='value.image' 
-            :name='value.title' 
-            :rate='value.rating.rate' 
-            :price='value.price'>
-            </ProductCard>
-        </div>
-        <div class="shop__pagination">
-            <img src="../assets/ar.png" alt="" class="sh-pg__arr" @click="prevPage" :disabled="currentPage === 1">
-            <span class="pg__number">{{ currentPage }} / {{ totalPages }}</span>
-            <img src="../assets/ar.png" alt="" class="sh-pg__arr" @click="nextPage" :disabled="currentPage === totalPages">
-        </div>
+      <FilterComp 
+        :categories="categories" 
+        :initialCategory="selectedCategory" 
+        @categoryChanged="updateCategory"
+      />
+      <div class="shop__cards">
+        <ProductCard 
+          v-for="(value, key) in filteredProductsByPage" 
+          :key="key"
+          :id="value.id" 
+          :urlImage="value.image" 
+          :name="value.title" 
+          :rate="value.rating.rate" 
+          :price="value.price">
+        </ProductCard>
+      </div>
+      <div class="shop__pagination">
+        <img src="../assets/ar.png" alt="" class="sh-pg__arr" @click="prevPage" :disabled="currentPage === 1">
+        <span class="pg__number">{{ currentPage }} / {{ totalPages }}</span>
+        <img src="../assets/ar.png" alt="" class="sh-pg__arr" @click="nextPage" :disabled="currentPage === totalPages">
+      </div>
     </div>
-</div>    
+  </div>    
 </template>
-
+  
 <script setup>
+import FilterComp from './FilterComp.vue';
 import ProductCard from './ProductCard.vue';
-import {ref, computed } from 'vue';
+import { ref, computed } from 'vue';
 
 const data = ref([]);
+const selectedCategory = ref('');
+const categories = ['electronics', 'jewelery', "men's clothing", "women's clothing"];
 
 fetch('https://fakestoreapi.com/products')
   .then(res => res.json())
   .then(json => {
     data.value = json; 
-    console.log(data)
-  })
+    console.log(data.value);
+  });
 
+const updateCategory = (category) => {
+  selectedCategory.value = category;
+  currentPage.value = 1;
+};
+
+const filteredProducts = computed(() => {
+  if (!selectedCategory.value || selectedCategory.value === 'All') {
+    return data.value;
+  }
+  return data.value.filter(product => product.category === selectedCategory.value);
+});
 
 const productsPerPage = 10; 
 const currentPage = ref(1);
-const totalPages = computed(() => Math.ceil(data.value.length / productsPerPage));
+const totalPages = computed(() => Math.ceil(filteredProducts.value.length / productsPerPage));
 
-const currentPageProducts = computed(() => {
+const filteredProductsByPage = computed(() => {
   const start = (currentPage.value - 1) * productsPerPage;
   const end = start + productsPerPage;
-  return data.value.slice(start, end);
+  return filteredProducts.value.slice(start, end);
 });
 
 const prevPage = () => {
@@ -48,7 +69,6 @@ const prevPage = () => {
     currentPage.value--;
     scrollToTop();
   }
-  
 };
 
 const nextPage = () => {
@@ -56,7 +76,6 @@ const nextPage = () => {
     currentPage.value++;
     scrollToTop();
   }
-  
 };
 
 const scrollToTop = () => {
@@ -71,7 +90,7 @@ const scrollToTop = () => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 10px;
     
 }
 
