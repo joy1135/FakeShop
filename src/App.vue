@@ -29,10 +29,16 @@ body {
   background-color: white;
 }
 
+a {
+  text-decoration: none;
+  color: #1a1a1a;
+}
+
 .router-link-active,
 .router-link-exact-active,
 .router-link {
   text-decoration: none;
+  color: #1a1a1a;
 }
 
 .container {

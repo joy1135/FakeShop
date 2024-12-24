@@ -1,3 +1,4 @@
+import CardPr from '@/components/CardPr.vue';
 import MainComponent from '@/components/MainComponent.vue';
 import ShopComp from '@/components/ShopComp.vue';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -12,6 +13,11 @@ const routes = [
       path: '/shop',
       name: 'shop',
       component: ShopComp,
+    },
+    {
+      path: '/card/:id',
+      name: 'card',
+      component: CardPr,
     },
   ];
   
