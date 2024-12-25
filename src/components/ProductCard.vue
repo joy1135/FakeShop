@@ -16,14 +16,16 @@
             </div>
             <div class="pr-card__price">{{ price*100 + "₽" }}</div>
         </router-link>
-        <button class="pr-card__btn">Купить</button>
+        <button class="pr-card__btn" @click="incrementCount(id)">Купить</button>
     </div>
 </div>
 
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { onMounted, watch, defineProps} from 'vue';
+import { cart } from '@/store/cart';
+
 
 
 defineProps({
@@ -34,7 +36,31 @@ defineProps({
   id: { type: Number, default: 0 },
 });
 
-const maxStars = 5; 
+const maxStars = 5;
+
+onMounted(() => {
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    Object.assign(cart, JSON.parse(savedCart));
+  }
+});
+
+watch(
+  cart,
+  (newCart) => {
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  },
+  { deep: true }
+);
+
+function incrementCount(productId) {
+  if (!cart[productId]) {
+    cart[productId] = 0;
+  }
+  cart[productId] += 1;
+}
+
+
 </script>
 
 

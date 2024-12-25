@@ -1,3 +1,4 @@
+import BascComp from '@/components/BascComp.vue';
 import CardPr from '@/components/CardPr.vue';
 import MainComponent from '@/components/MainComponent.vue';
 import ShopComp from '@/components/ShopComp.vue';
@@ -18,6 +19,11 @@ const routes = [
       path: '/card/:id',
       name: 'card',
       component: CardPr,
+    },
+    {
+      path: '/basc',
+      name: 'basc',
+      component: BascComp,
     },
   ];
   

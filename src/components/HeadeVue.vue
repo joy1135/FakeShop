@@ -15,7 +15,9 @@
                     </router-link> 
                 </li>
                 <li class="menu__item">
-                  <img src="../assets/header/shop.png" alt="" class="menu__link--img">
+                    <router-link to="/basc">
+                        <img src="../assets/header/shop.png" alt="" class="menu__link--img">
+                    </router-link>
                 </li>
             </ul>
         </nav>

@@ -30,6 +30,7 @@
 import FilterComp from './FilterComp.vue';
 import ProductCard from './ProductCard.vue';
 import { ref, computed } from 'vue';
+import { products } from '@/store/cart';
 
 const data = ref([]);
 const selectedCategory = ref('');
@@ -38,8 +39,8 @@ const categories = ['electronics', 'jewelery', "men's clothing", "women's clothi
 fetch('https://fakestoreapi.com/products')
   .then(res => res.json())
   .then(json => {
-    data.value = json; 
-    console.log(data.value);
+    data.value = json;
+    products.splice(0, products.length, ...data.value);
   });
 
 const updateCategory = (category) => {

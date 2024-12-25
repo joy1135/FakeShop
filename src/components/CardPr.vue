@@ -16,7 +16,7 @@
                         <div class="card-pr__rate-cou">{{ data.rating?.count + " отзывов" }}</div>
                     </div>
                     <div class="card-pr__price">{{ data.price * 100 + "₽" }}</div>
-                    <button class="card-pr__btn">
+                    <button class="card-pr__btn" @click="incrementCount(data.id)">
                         Купить
                     </button>
                 </div>
@@ -33,7 +33,8 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-import {ref} from 'vue';
+import { onMounted, watch, ref} from 'vue';
+import { cart } from '@/store/cart';
 
 const data = ref({});
 const route = useRoute();
@@ -46,6 +47,29 @@ fetch(`https://fakestoreapi.com/products/${productId}`)
 })
 
 const maxStars = 5; 
+
+onMounted(() => {
+  const savedCart = localStorage.getItem('cart');
+  if (savedCart) {
+    Object.assign(cart, JSON.parse(savedCart));
+  }
+});
+
+watch(
+  cart,
+  (newCart) => {
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  },
+  { deep: true }
+);
+
+function incrementCount(productId) {
+  if (!cart[productId]) {
+    cart[productId] = 0;
+  }
+  cart[productId] += 1;
+}
+
 
 </script>
 
